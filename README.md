@@ -113,6 +113,12 @@ bifrost({
 })
 ```
 
+The Object flavour expects the following properties:
+
+### req
+
+_Function_, _Optional_. The request handler. This should be set to a function that takes a Express Request object instance and returns a
+
 ## Credits
 
 Inspired by [fxrm-action](https://github.com/fxrm/fxrm-action), written by [Nick Matantsev](https://github.com/unframework).
