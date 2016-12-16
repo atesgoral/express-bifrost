@@ -23,12 +23,12 @@ or
 import bifrost from 'express-bifrost';
 ```
 
-Where you would typically pass the Request and Response objects of Express directly down to a controller, use bifrost as a bridge between the HTTP Request/Response objects and an HTTP-agnostic controller.
+Where you would typically pass the Request and Response objects of Express directly down to a controller, use express-bifrost as a bridge between the HTTP Request/Response objects and an HTTP-agnostic controller.
 
 Before:
 
 ```js
-// Controller directly knows about Request/Response
+// Controller directly knows about HTTP Request/Response
 function readHorse(req, res, next) {
   const horseId = req.params.horseId;
   
@@ -52,7 +52,7 @@ After:
 ```js
 // Controller is HTTP-agnostic -- just returns a Promise
 function readHorse(horseId) {  
-  Horse
+  return Horse
     .findById(horseId)
     .then(horse => {
       if (horse) {
@@ -73,4 +73,34 @@ app.get('/horses/:horseId', bifrost(req => {
 
 // Or, super-compact version:
 app.get('/horses/:horseId', bifrost(req => readHorse(req.params.horseId));
+```
+
+By default, express-bifrost sends the promise resolution value as the response using `.send()`, which will automatically send objects as JSON. Also, promise rejection values (errors) are passed down to other middleware through `next()`. When you need finer-grain control over how responses are sent, and how errors are handled, you can use the extended syntax and pass express-bifrost an object with `req`, `res` and `err` properties:
+
+```js
+app.get('/horses/:horseId', bifrost({
+  req: req => {
+    // Collect everything we need from the Request
+    const horseId = req.params.horseId;
+  
+    // Pass on to non-HTTP land
+    return readHorse(horseId);
+  },
+  res: (res, data) => {
+    // Wrap the response returned from the request handler inside an envelope
+    res.json({
+      meta: { horseId },
+      data
+    });
+  },
+  err: (res, next, error) => {
+    if (/not found/i.test(error.message)) { // Note: Hacky! Just OK for the sake of this example.
+      // Be nice and return a 404
+      res.status(404).send(error.message);
+    } else {
+      // Pass down to other middleware / default error handling
+      next(error);
+    }
+  }
+});
 ```
