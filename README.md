@@ -1,5 +1,5 @@
 # express-bifrost
-Decouples the HTTP world (Express middleware) from the rest of your code so that HTTP concerns don't leak between them. 
+Decouples the HTTP world (Express middleware) from the rest of your code so that HTTP concerns don't leak between them. Actually, express-bifrost doesn't do the decoupling itself, but provides a pattern to encourage you to do it.
 
 ![Thor wades while the æsir ride by Frølich](https://cloud.githubusercontent.com/assets/50832/21269637/76d0ce1c-c381-11e6-901b-3ea18580322c.jpg)
 
@@ -23,7 +23,7 @@ or
 import bifrost from 'express-bifrost';
 ```
 
-Where you would typically pass the Request and Response objects of Express directly down to a controller, use express-bifrost as a bridge between the HTTP Request/Response objects and an HTTP-agnostic controller.
+Where you would typically pass the Request and Response objects of Express directly down to a controller, use express-bifrost as a bridge between the HTTP Request/Response objects and an HTTP-agnostic controller. express-bifrost acts as a factory for Express middleware.
 
 Before:
 
@@ -101,8 +101,17 @@ app.get('/horses/:horseId', bifrost({
 
 ## API
 
-Actually, the entire implementation of express-bifrost is so tiny, you might be better of just reading [the source](index.js).
+_Actually, the implementation of express-bifrost is so tiny, you might be better off just reading [the entire source](index.js)._
 
+express-bifrost takes a single argument which is either an Object or a Function. The Function flavour acts as a shorthand for the Object flavour with just the `req` property. The following two forms are functionally identical:
+
+```
+bifrost(req => fetchMySword(req.params.urgency))
+
+bifrost({
+  req: req => fetchMySword(req.params.urgency)
+})
+```
 
 ## Credits
 
