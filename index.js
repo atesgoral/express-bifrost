@@ -15,7 +15,8 @@ function bifrost(options) {
 
   return (req, res, next) => {
     Promise
-      .resolve(bridge.req && bridge.req(req))
+      .resolve()
+      .then(() => bridge.req && bridge.req(req))
       .then(data => {
         if (bridge.res) {
           bridge.res(res, data);
