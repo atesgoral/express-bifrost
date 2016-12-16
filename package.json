@@ -1,0 +1,12 @@
+{
+  "name": "express-bifrost",
+  "version": "0.0.1",
+  "description": "Bridges the HTTP world (Express middleware) to the pure controller world",
+  "main": "index.js",
+  "repository": {
+    "url": "git@github.com:atesgoral/express-bifrost.git",
+    "type": "git"
+  },
+  "author": "Ates Goral <ates@magnetiq.com>",
+  "license": "MIT"
+}
