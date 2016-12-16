@@ -75,17 +75,11 @@ app.get('/horses/:horseId', bifrost(req => {
 app.get('/horses/:horseId', bifrost(req => readHorse(req.params.horseId));
 ```
 
-By default, express-bifrost sends the promise resolution value as the response using `.send()`, which will automatically send objects as JSON. Also, promise rejection values (errors) are passed down to other middleware through `next()`. When you need finer-grain control over how responses are sent, and how errors are handled, you can use the extended syntax and pass express-bifrost an object with `req`, `res` and `err` properties:
+By default, express-bifrost sends the promise resolution value as the response using `.send()`, which will automatically send objects as JSON. Also, promise rejection values (errors) are passed down to other middleware through `next()`. When you need finer-grain control over how responses are sent, and how errors are handled, you can use the extended syntax and pass express-bifrost an object with `req`, `res` and `err` properties, which are all optional:
 
 ```js
 app.get('/horses/:horseId', bifrost({
-  req: req => {
-    // Collect everything we need from the Request
-    const horseId = req.params.horseId;
-  
-    // Pass on to non-HTTP land
-    return readHorse(horseId);
-  },
+  req: req => readHorse(req.params.horseId),
   res: (res, data) => {
     // Wrap the response returned from the request handler inside an envelope
     res.json({
@@ -104,3 +98,12 @@ app.get('/horses/:horseId', bifrost({
   }
 });
 ```
+
+## API
+
+Actually, the entire implementation of express-bifrost is so tiny, you might be better of just reading [the source](index.js).
+
+
+## Credits
+
+Inspired by [fxrm-action](https://github.com/fxrm/fxrm-action), written by [Nick Matantsev](https://github.com/unframework).
