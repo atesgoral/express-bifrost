@@ -1,5 +1,5 @@
 # express-bifrost
-Decouples the HTTP world of Express middleware (Midgard) from the rest of your code (Asgard) so that HTTP concerns don't leak into controllers. 
+Decouples the HTTP world (Express middleware) from the rest of your code so that HTTP concerns don't leak between them. 
 
 ![Thor wades while the æsir ride by Frølich](https://cloud.githubusercontent.com/assets/50832/21269637/76d0ce1c-c381-11e6-901b-3ea18580322c.jpg)
 
