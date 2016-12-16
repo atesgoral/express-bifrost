@@ -107,7 +107,7 @@ _Actually, the implementation of express-bifrost is so tiny, you might be better
 
 express-bifrost takes a single argument which is either an Object or a Function. The Function flavour acts as a shorthand for the Object flavour with just the `req` property. The following two forms are functionally identical:
 
-```
+```js
 bifrost(req => fetchMySword(req.params.urgency))
 
 bifrost({
@@ -119,9 +119,11 @@ The Object flavour expects the following properties:
 
 #### req
 
-_Function_, _optional_. The request handler. This should be a function that takes an [Express Request](http://expressjs.com/en/api.html#req) object instance. Its purpose should be to grab whatever is needed from the request object and pass it down to controller/service layers in your application. The function may return a Promise. It may also return a value to be returned in the response or throw an exception to trigger error handling. Examples:
+_Function_, _optional_. The request handler. This should be a function that takes an [Express Request](http://expressjs.com/en/api.html#req) object instance. Its purpose should be to grab whatever is needed from the request object and pass it down to controller/service layers in your application. The function may return a Promise. It may also return a value to be returned in the response or throw an exception to trigger error handling.
 
-```
+Examples:
+
+```js
 bifrost({
   req: req => {
     return authenticate(req.body.username, req.body.password); // returns a Promise
@@ -143,9 +145,36 @@ bifrost({
 
 _Function_, _optional_. The response handler. This should be a function that takes an [Express Response](http://expressjs.com/en/api.html#res) object and the data returned from the request handler (`undefined` if no response handler was provided). The function takes over express-bifrost's default response handling of sending whatever was returned by the request handler via the Response object's `.send()` method.
 
+Example:
+
+```js
+bifrost({
+  req: req => collateDashboardData(),
+  res: (res, data) => {
+    res.render('dashboard', data);
+  }
+})
+```
+
 #### err
 
 _Function_, _optional_. The error handler. This should be a function that takes an Express Response object, the Express `next` callback handler, and an error value. The function takes over express-bifrost's default error handling of passing the error value down to the Express `next` callback. You can use this to apply custom error handling depending on the error value and respond with the appropriate HTTP response codes. 
+
+Example:
+
+```js
+bifrost({
+  err: (res, next, error) => {
+    if (error instanceof AuthorizationError) {
+      res.status(403).end();
+    } else if (error instanceof ResourceNotFoundError) {
+      res.status(404).end();
+    } else {
+      next(error);
+    }
+  }
+})
+```
 
 ### Defaults
 
