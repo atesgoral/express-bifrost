@@ -117,7 +117,29 @@ The Object flavour expects the following properties:
 
 ### req
 
-_Function_, _Optional_. The request handler. This should be set to a function that takes a Express Request object instance and returns a
+_Function_, _optional_. The request handler. This should be a function that takes an Express Request object instance. Its purpose should be to grab whatever is needed from the request object and pass it down to controller/service layers in your application. The function may return a Promise. It may also return a value to be returned in the response or throw an exception to trigger error handling. Examples:
+
+```
+bifrost({
+  req: req => {
+    return authenticate(req.body.username, req.body.password); // returns a Promise
+  }
+})
+
+bifrost({
+  req: req => {
+    if (isAuthenticated(req.body.username, req.body.password)) { // returns a Boolean
+      return 'Yay!';
+    } else {
+      throw new Error('Nay!');
+    }
+  }
+})
+```
+
+### res
+
+_Function_, _optional_. The response handler. This should be a function that takes an Express Response object and the data returned from the request handler (`undefined` if no response handler was provided). The function takes over express-bifrost's default response handling of sending whatever was returned by the request handler via the Response object's `.send()` method.
 
 ## Credits
 
