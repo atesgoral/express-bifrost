@@ -30,7 +30,8 @@ Before:
 function readHorse(req, res, next) {
   const horseId = req.params.horseId;
   
-  Horse.findById(horseId)
+  Horse
+    .findById(horseId)
     .then(horse => {
       if (horse) {
         res.json(horse)
@@ -49,15 +50,15 @@ After:
 ```js
 // Controller is HTTP-agnostic -- just returns a Promise
 function readHorse(horseId) {  
-  Horse.findById(horseId)
+  Horse
+    .findById(horseId)
     .then(horse => {
       if (horse) {
-        res.json(horse)
+        return horse;
       } else {
-        res.status(404).send('Horse not found');
+        throw new Error('Horse not found');
       }
-    })
-    .catch(next);
+    });
 }
 
 app.get('/horses/:horseId', bifrost(req => {
