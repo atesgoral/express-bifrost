@@ -141,6 +141,14 @@ bifrost({
 
 _Function_, _optional_. The response handler. This should be a function that takes an Express Response object and the data returned from the request handler (`undefined` if no response handler was provided). The function takes over express-bifrost's default response handling of sending whatever was returned by the request handler via the Response object's `.send()` method.
 
+### err
+
+_Function_, _optional_. The error handler. This should be a function that takes an Express Response object, the Express `next` callback handler, and an error value. The function takes over express-bifrost's default error handling of passing the error value down to the Express `next` callback. You can use this to apply custom error handling depending on the error value and respond with the appropriate HTTP response codes. 
+
+## License
+
+MIT
+
 ## Credits
 
 Inspired by [fxrm-action](https://github.com/fxrm/fxrm-action), written by [Nick Matantsev](https://github.com/unframework).
