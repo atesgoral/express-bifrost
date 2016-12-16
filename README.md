@@ -103,6 +103,8 @@ app.get('/horses/:horseId', bifrost({
 
 _Actually, the implementation of express-bifrost is so tiny, you might be better off just reading [the entire source](index.js)._
 
+### Options
+
 express-bifrost takes a single argument which is either an Object or a Function. The Function flavour acts as a shorthand for the Object flavour with just the `req` property. The following two forms are functionally identical:
 
 ```
@@ -115,9 +117,9 @@ bifrost({
 
 The Object flavour expects the following properties:
 
-### req
+#### req
 
-_Function_, _optional_. The request handler. This should be a function that takes an Express Request object instance. Its purpose should be to grab whatever is needed from the request object and pass it down to controller/service layers in your application. The function may return a Promise. It may also return a value to be returned in the response or throw an exception to trigger error handling. Examples:
+_Function_, _optional_. The request handler. This should be a function that takes an [Express Request](http://expressjs.com/en/api.html#req) object instance. Its purpose should be to grab whatever is needed from the request object and pass it down to controller/service layers in your application. The function may return a Promise. It may also return a value to be returned in the response or throw an exception to trigger error handling. Examples:
 
 ```
 bifrost({
@@ -137,13 +139,17 @@ bifrost({
 })
 ```
 
-### res
+#### res
 
-_Function_, _optional_. The response handler. This should be a function that takes an Express Response object and the data returned from the request handler (`undefined` if no response handler was provided). The function takes over express-bifrost's default response handling of sending whatever was returned by the request handler via the Response object's `.send()` method.
+_Function_, _optional_. The response handler. This should be a function that takes an [Express Response](http://expressjs.com/en/api.html#res) object and the data returned from the request handler (`undefined` if no response handler was provided). The function takes over express-bifrost's default response handling of sending whatever was returned by the request handler via the Response object's `.send()` method.
 
-### err
+#### err
 
 _Function_, _optional_. The error handler. This should be a function that takes an Express Response object, the Express `next` callback handler, and an error value. The function takes over express-bifrost's default error handling of passing the error value down to the Express `next` callback. You can use this to apply custom error handling depending on the error value and respond with the appropriate HTTP response codes. 
+
+### Defaults
+
+The `defaults` property of express-bifrost holds default values for the options above. All default options are set to `null` by default. Override any of these properties to have global handlers that are applied across all express-bifrost middleware instances.
 
 ## License
 
