@@ -1,7 +1,7 @@
 const defaults = {
-  bridgeReq: null,
-  bridgeRes: null,
-  bridgeErr: null
+  req: null,
+  res: null,
+  err: null
 };
 
 function bifrost(options) {
