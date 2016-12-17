@@ -31,7 +31,7 @@ Before:
 // Controller directly knows about HTTP Request/Response
 function readHorse(req, res, next) {
   const horseId = req.params.horseId;
-  
+
   Horse
     .findById(horseId)
     .then(horse => {
@@ -51,7 +51,7 @@ After:
 
 ```js
 // Controller is HTTP-agnostic -- just returns a Promise
-function readHorse(horseId) {  
+function readHorse(horseId) {
   return Horse
     .findById(horseId)
     .then(horse => {
@@ -66,7 +66,7 @@ function readHorse(horseId) {
 app.get('/horses/:horseId', bifrost(req => {
   // Collect everything we need from the Request
   const horseId = req.params.horseId;
-  
+
   // Pass on to non-HTTP land
   return readHorse(horseId);
 });
@@ -150,15 +150,13 @@ Example:
 ```js
 bifrost({
   req: req => collateDashboardData(),
-  res: (res, data) => {
-    res.render('dashboard', data);
-  }
+  res: (res, data) => res.render('dashboard', data)
 })
 ```
 
 #### err
 
-_Function_, _optional_. The error handler. This should be a function that takes an Express Response object, the Express `next` callback handler, and an error value. The function takes over express-bifrost's default error handling of passing the error value down to the Express `next` callback. You can use this to apply custom error handling depending on the error value and respond with the appropriate HTTP response codes. 
+_Function_, _optional_. The error handler. This should be a function that takes an Express Response object, the Express `next` callback handler, and an error value. The function takes over express-bifrost's default error handling of passing the error value down to the Express `next` callback. You can use this to apply custom error handling depending on the error value and respond with the appropriate HTTP response codes.
 
 Example:
 
