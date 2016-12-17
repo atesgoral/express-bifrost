@@ -75,7 +75,7 @@ app.get('/horses/:horseId', bifrost(req => {
 app.get('/horses/:horseId', bifrost(req => readHorse(req.params.horseId));
 ```
 
-By default, express-bifrost sends the promise resolution value as the response using `.send()`, which will automatically send objects as JSON. Also, promise rejection values (errors) are passed down to other middleware through `next()`. When you need finer-grain control over how responses are sent, and how errors are handled, you can use the extended syntax and pass express-bifrost an object with `req`, `res` and `err` properties, which are all optional:
+By default, express-bifrost sends the promise resolution value as the response using `.send()`, which will automatically send objects as JSON. Also, promise rejection values (errors) are passed down to other middleware through `next()`. When you need fine-grained control over how responses are sent, and how errors are handled, you can use the extended syntax and pass express-bifrost an object with `req`, `res` and `err` properties, which are all optional:
 
 ```js
 app.get('/horses/:horseId', bifrost({
@@ -163,6 +163,7 @@ Example:
 ```js
 bifrost({
   err: (res, next, error) => {
+    // Handle custom errors thrown by the controller
     if (error instanceof AuthorizationError) {
       res.status(403).end();
     } else if (error instanceof ResourceNotFoundError) {
@@ -177,6 +178,33 @@ bifrost({
 ### Defaults
 
 The `defaults` property of express-bifrost holds default values for the options above. All default options are set to `null` by default. Override any of these properties to have global handlers that are applied across all express-bifrost middleware instances.
+
+Example:
+
+```js
+// Generic response handler
+bifrost.defaults.res = (res, data) => {
+  if (data instanceof File) {
+    res.sendFile(data.path);
+  } else {
+    res.json(data);
+  }
+};
+
+// Generic error handler
+bifrost.defaults.err = (res, next, error) => {
+    if (error instanceof AuthorizationError) {
+      res.status(403).end();
+    } else if (error instanceof ResourceNotFoundError) {
+      res.status(404).end();
+    } else if (error instanceof BadArgumentsError) {
+      res.status(400).end();
+    } else {
+      res.status(500).end();
+    }
+  }
+};
+```
 
 ## License
 
