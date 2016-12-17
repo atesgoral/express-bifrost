@@ -193,15 +193,14 @@ bifrost.defaults.res = (res, data) => {
 
 // Generic error handler
 bifrost.defaults.err = (res, next, error) => {
-    if (error instanceof AuthorizationError) {
-      res.status(403).end();
-    } else if (error instanceof ResourceNotFoundError) {
-      res.status(404).end();
-    } else if (error instanceof BadArgumentsError) {
-      res.status(400).end();
-    } else {
-      res.status(500).end();
-    }
+  if (error instanceof AuthorizationError) {
+    res.status(403).end();
+  } else if (error instanceof ResourceNotFoundError) {
+    res.status(404).end();
+  } else if (error instanceof BadArgumentsError) {
+    res.status(400).end();
+  } else {
+    res.status(500).end();
   }
 };
 ```
