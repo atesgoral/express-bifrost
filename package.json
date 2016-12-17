@@ -1,6 +1,6 @@
 {
   "name": "express-bifrost",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Bridges the HTTP world (Express middleware) to the pure controller world",
   "main": "index.js",
   "repository": {
